@@ -22,19 +22,22 @@ class CharacterMapper {
     return Character(
       id: map['id'] as String,
       name: map['name'] as String,
-      characterClass:
-          CharacterClass.values.byName(map['characterClass'] as String),
-      rarity:
-          CharacterRarity.values.byName(map['rarity'] as String),
-      level: map['level'] as int,
-      threat: map['threat'] as int,
-      attack: map['attack'] as int,
-      health: map['health'] as int,
-      stars: map['stars'] as int,
-      alignment:
-          CharacterAlignment.values.byName(map['alignment'] as String),
-      createdAt: DateTime.parse(map['createdAt'] as String),
-      updatedAt: DateTime.parse(map['updatedAt'] as String),
+      characterClass: CharacterClass.values.byName(
+        (map['characterClass'] as String?) ?? CharacterClass.poderoso.name,
+      ),
+      rarity: CharacterRarity.values.byName(
+        (map['rarity'] as String?) ?? CharacterRarity.prata.name,
+      ),
+      level: (map['level'] as int?) ?? 1,
+      threat: (map['threat'] as int?) ?? 0,
+      attack: (map['attack'] as int?) ?? 0,
+      health: (map['health'] as int?) ?? 0,
+      stars: (map['stars'] as int?) ?? 1,
+      alignment: CharacterAlignment.values.byName(
+        (map['alignment'] as String?) ?? CharacterAlignment.heroi.name,
+      ),
+      createdAt: DateTime.tryParse(map['createdAt'] as String? ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(map['updatedAt'] as String? ?? '') ?? DateTime.now(),
     );
   }
 }

@@ -67,26 +67,36 @@ class _CharacterEditDialogState extends State<CharacterEditDialog> {
 
     setState(() => _isSaving = true);
 
-    final updated = widget.character.copyWith(
-      name: name,
-      characterClass: _selectedClass,
-      rarity: _selectedRarity,
-      alignment: _selectedAlignment,
-      level: _level,
-      attack: _attack,
-      health: _health,
-      threat: _threat,
-      stars: _stars,
-      updatedAt: DateTime.now(),
-    );
-
-    await widget.viewModel.commands.updateCharacter(updated);
-
-    if (mounted) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${updated.name} atualizado com sucesso!')),
+    try {
+      final updated = widget.character.copyWith(
+        name: name,
+        characterClass: _selectedClass,
+        rarity: _selectedRarity,
+        alignment: _selectedAlignment,
+        level: _level,
+        attack: _attack,
+        health: _health,
+        threat: _threat,
+        stars: _stars,
+        updatedAt: DateTime.now(),
       );
+
+      await widget.viewModel.commands.updateCharacter(updated);
+
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${updated.name} atualizado com sucesso!')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao salvar: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
